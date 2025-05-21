@@ -10,6 +10,7 @@ import Foundation
 
 class NetworkManager {
     static let shared = NetworkManager()
+    private let baseUrl = "https://moviatask.cerasus.app/api"
     private init() {}
 
     func postRequest<T: Decodable>(
@@ -115,7 +116,7 @@ extension NetworkManager {
         ]
 
         postRequest(
-            url: "https://moviatask.cerasus.app/api/auth/login",
+            url: "\(baseUrl)/auth/login",
             body: body,
             responseType: LoginResponse.self,
             completion: completion
@@ -137,7 +138,7 @@ extension NetworkManager {
             ]
 
             postRequest(
-                url: "https://moviatask.cerasus.app/api/auth/register",
+                url: "\(baseUrl)/auth/register",
                 body: body,
                 responseType: RegisterResponse.self,
                 completion: completion
@@ -149,38 +150,48 @@ extension NetworkManager {
     
     func getMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
         getRequest(
-            url: "https://moviatask.cerasus.app/api/movies",
+            url: "\(baseUrl)/movies",
             responseType: [Movie].self,
             completion: completion
         )
     }
     
     func getLikedMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
-            let url = "https://moviatask.cerasus.app/api/users/liked-movies"
+            let url = "\(baseUrl)/users/liked-movies"
             getRequest(url: url, responseType: [Movie].self, completion: completion)
         }
+    
+    func getLikedMovieIds(completion: @escaping (Result<[Int], Error>) -> Void) {
+        let url = "\(baseUrl)/users/liked-movie-ids"
+        
+        NetworkManager.shared.getRequest(
+            url: url,
+            responseType: [Int].self,
+            completion: completion
+        )
+    }
 }
 
 //MARK: - POST functions
 
 extension NetworkManager {
-    func likeMovie(movieId: Int, completion: @escaping (Result<LikeResponse, Error>) -> Void) {
-        let url = "https://moviatask.cerasus.app/api/movies/like/\(movieId)"
+    func likeMovie(movieId: Int, completion: @escaping (Result<LikeResponseModel, Error>) -> Void) {
+        let url = "\(baseUrl)/movies/like/\(movieId)"
         
         postRequest(
             url: url,
             body: [:], 
-            responseType: LikeResponse.self,
+            responseType: LikeResponseModel.self,
             completion: completion
         )
     }
-    func unlikeMovie(movieId: Int, completion: @escaping (Result<LikeResponse, Error>) -> Void) {
-        let url = "https://moviatask.cerasus.app/api/movies/unlike/\(movieId)"
+    func unlikeMovie(movieId: Int, completion: @escaping (Result<LikeResponseModel, Error>) -> Void) {
+        let url = "\(baseUrl)/movies/unlike/\(movieId)"
         
         postRequest(
             url: url,
             body: [:],
-            responseType: LikeResponse.self,
+            responseType: LikeResponseModel.self,
             completion: completion
         )
     }

@@ -2,7 +2,9 @@ import SwiftUI
 
 struct MovieDetailView: View {
     @StateObject private var viewModel = MovieDetailViewModel()
-    
+    var isLiked: Bool {
+        viewModel.likedMovieIds.contains(movie.id)
+    }
     let movie: Movie
     
     var body: some View {
@@ -52,46 +54,38 @@ struct MovieDetailView: View {
                 .padding()
             }
             
-            
-            HStack(spacing: 40) {
                 Button(action: {
-                    print("Like tapped for \(movie.title)")
-                    viewModel.likeMovie(movieId: movie.id)
+                    if isLiked {
+                        viewModel.unlikeMovie(movieId: movie.id)
+                    }else {
+                        viewModel.likeMovie(movieId: movie.id)
+                    }
+                    
                 }) {
-                    Label("Like", systemImage: "hand.thumbsup.fill")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.green)
-                        .cornerRadius(10)
+                    if !isLiked {
+                        Label("Like", systemImage: "hand.thumbsup.fill")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .cornerRadius(10)
+                    }else {
+                        Label("Dislike", systemImage: "hand.thumbsdown.fill")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.red)
+                            .cornerRadius(10)
+                    }
+                    
                 }
-                
-                Button(action: {
-                    print("Dislike tapped for \(movie.title)")
-                    viewModel.unlikeMovie(movieId: movie.id)
-                }) {
-                    Label("Dislike", systemImage: "hand.thumbsdown.fill")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.red)
-                        .cornerRadius(10)
-                }
-            }
-            
             .padding([.horizontal, .bottom])
-            if let message = viewModel.successMessage {
-                Text(message)
-                    .foregroundColor(.green)
-            }
             
-            if let error = viewModel.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-            }
-        }
+        }.onAppear(perform: {
+            viewModel.fetchLikedMovieIds()
+        })
         .navigationTitle(movie.title)
         .navigationBarTitleDisplayMode(.inline)
     }

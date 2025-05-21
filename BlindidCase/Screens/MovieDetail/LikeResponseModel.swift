@@ -6,6 +6,6 @@
 //
 
 
-struct LikeResponse: Decodable {
+struct LikeResponseModel: Decodable {
     let message: String
 }

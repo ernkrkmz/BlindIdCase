@@ -27,12 +27,12 @@ struct HomeView: View {
                                         AsyncImage(url: URL(string: movie.posterUrl)) { image in
                                             image
                                                 .resizable()
-                                                .scaledToFit()
+                                                .scaledToFill()
                                             
                                         } placeholder: {
                                             ProgressView()
                                         }
-                                        .frame(width: 100, height: 120, alignment: .center)
+                                        .frame(width: 100, height: 130, alignment: .center)
                                         .clipped()
                                         .cornerRadius(8)
                                         

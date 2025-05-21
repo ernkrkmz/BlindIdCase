@@ -32,7 +32,7 @@ struct LoginView: View {
 
                 Button("Giriş Yap") {
                     print("burda")
-                    viewModel.login(email: "john@example.com", password: "password123")
+                    viewModel.login()
                 }
                 .padding()
                 .frame(maxWidth: .infinity)

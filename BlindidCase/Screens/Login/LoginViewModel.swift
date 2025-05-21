@@ -10,33 +10,32 @@ import Foundation
 import Combine
 
 class LoginViewModel: ObservableObject {
-    @Published var email: String = "john@example.com"
-    @Published var password: String = "password123"
+    @Published var email: String = "eren@gmail.com"
+    @Published var password: String = "eren1234"
     @Published var errorMessage: String?
     @Published var isLoggedIn: Bool = false
 
-    func login(email: String, password: String) {
-        let params: [String: Any] = [
-            "email": email,
-            "password": password
-        ]
-
-        NetworkManager.shared.postRequest(
-            url: "https://moviatask.cerasus.app/api/auth/login",
-            body: params,
-            responseType: LoginResponse.self
-        ) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let response):
-                    print("Token: \(response.token ?? "Yok")")
-                    UserDefaults.standard.set(response.token, forKey: "authToken")
-
-                case .failure(let error):
-                    print("Login hatası: \(error.localizedDescription)")
+    func login() {
+            NetworkManager.shared.loginUser(
+                email: email,
+                password: password
+            ) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let response):
+                        if let token = response.token {
+                            UserDefaults.standard.set(token, forKey: "authToken")
+                            print(response.token)
+                            AuthManager.shared.token = token
+                            self.isLoggedIn = true
+                        } else {
+                            self.errorMessage = response.message ?? "Giriş başarısız"
+                        }
+                    case .failure(let error):
+                        self.errorMessage = error.localizedDescription
+                    }
                 }
             }
         }
-    }
 
 }

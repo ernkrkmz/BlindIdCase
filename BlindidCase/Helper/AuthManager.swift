@@ -14,7 +14,12 @@ class AuthManager {
     private init() {}
     
     var token: String? {
-        UserDefaults.standard.string(forKey: "authToken")
+        get {
+            UserDefaults.standard.string(forKey: "authToken")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "authToken")
+        }
     }
     
     func isLoggedIn() -> Bool {

@@ -154,4 +154,35 @@ extension NetworkManager {
             completion: completion
         )
     }
+    
+    func getLikedMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
+            let url = "https://moviatask.cerasus.app/api/users/liked-movies"
+            getRequest(url: url, responseType: [Movie].self, completion: completion)
+        }
 }
+
+//MARK: - POST functions
+
+extension NetworkManager {
+    func likeMovie(movieId: Int, completion: @escaping (Result<LikeResponse, Error>) -> Void) {
+        let url = "https://moviatask.cerasus.app/api/movies/like/\(movieId)"
+        
+        postRequest(
+            url: url,
+            body: [:], 
+            responseType: LikeResponse.self,
+            completion: completion
+        )
+    }
+    func unlikeMovie(movieId: Int, completion: @escaping (Result<LikeResponse, Error>) -> Void) {
+        let url = "https://moviatask.cerasus.app/api/movies/unlike/\(movieId)"
+        
+        postRequest(
+            url: url,
+            body: [:],
+            responseType: LikeResponse.self,
+            completion: completion
+        )
+    }
+}
+

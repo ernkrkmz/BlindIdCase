@@ -9,11 +9,15 @@
 struct Movie: Decodable, Identifiable {
     let id: Int
     let title: String
-    let posterUrl: String  
+    let posterUrl: String
+    let category: String
+    let rating: Double
+    let description: String
+    let actors: [String]
 
     enum CodingKeys: String, CodingKey {
-        case id
-        case title
+        case id, title, category, rating, description, actors
         case posterUrl = "poster_url"
     }
 }
+

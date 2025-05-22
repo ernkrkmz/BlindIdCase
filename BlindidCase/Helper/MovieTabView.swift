@@ -29,5 +29,7 @@ struct MovieTabView: View {
                     Text("Profile")
                 }
         }
+        .navigationBarBackButtonHidden(true)
+
     }
 }

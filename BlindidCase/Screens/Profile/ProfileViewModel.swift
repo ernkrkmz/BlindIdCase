@@ -33,8 +33,9 @@ class ProfileViewModel: ObservableObject {
         }
     }
     
-    func logOut() {
+    func logOut(appState: AppState) {
         AuthManager.shared.logout()
-        
+        appState.isLoggedIn = false
     }
+
 }

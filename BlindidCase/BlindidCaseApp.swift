@@ -9,13 +9,17 @@ import SwiftUI
 
 @main
 struct BlindidCaseApp: App {
+    
+    @StateObject var appState = AppState()
+    
     var body: some Scene {
         WindowGroup {
-            
-            if AuthManager.shared.isLoggedIn() {
+            if appState.isLoggedIn {
                 MovieTabView()
-            }else {
+                    .environmentObject(appState)
+            } else {
                 LoginView()
+                    .environmentObject(appState)
             }
         }
     }

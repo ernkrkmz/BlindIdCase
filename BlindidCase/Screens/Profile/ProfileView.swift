@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         NavigationView {
@@ -48,7 +49,8 @@ struct ProfileView: View {
                         Spacer()
 
                         Button(action: {
-                            viewModel.logOut()
+                            viewModel.logOut(appState: appState)
+
                         }) {
                             Text("Çıkış Yap")
                                 .font(.headline)

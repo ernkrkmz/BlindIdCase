@@ -155,7 +155,13 @@ extension NetworkManager {
             completion: completion
         )
     }
-    
+    func getMovieById(movieId: Int ,completion: @escaping (Result<Movie, Error>) -> Void) {
+        getRequest(
+            url: "\(baseUrl)/movies/\(movieId)",
+            responseType: Movie.self,
+            completion: completion
+        )
+    }
     func getLikedMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
             let url = "\(baseUrl)/users/liked-movies"
             getRequest(url: url, responseType: [Movie].self, completion: completion)

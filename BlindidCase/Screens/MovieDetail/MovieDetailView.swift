@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MovieDetailView: View {
     @StateObject private var viewModel = MovieDetailViewModel()
+    
     var isLiked: Bool {
         viewModel.likedMovieIds.contains(movie.id)
     }
@@ -83,9 +84,9 @@ struct MovieDetailView: View {
                 }
             .padding([.horizontal, .bottom])
             
-        }.onAppear(perform: {
+        }.onAppear {
             viewModel.fetchLikedMovieIds()
-        })
+        }
         .navigationTitle(movie.title)
         .navigationBarTitleDisplayMode(.inline)
     }

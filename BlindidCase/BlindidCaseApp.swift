@@ -11,7 +11,12 @@ import SwiftUI
 struct BlindidCaseApp: App {
     var body: some Scene {
         WindowGroup {
-            MovieTabView()
+            
+            if AuthManager.shared.isLoggedIn() {
+                MovieTabView()
+            }else {
+                LoginView()
+            }
         }
     }
 }

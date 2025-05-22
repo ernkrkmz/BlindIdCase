@@ -58,6 +58,9 @@ struct HomeView: View {
                 viewModel.fetchMovies()
                 
             }
+            
         }
+        
     }
+    
 }

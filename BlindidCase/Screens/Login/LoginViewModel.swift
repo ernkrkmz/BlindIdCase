@@ -25,7 +25,6 @@ class LoginViewModel: ObservableObject {
                     case .success(let response):
                         if let token = response.token {
                             UserDefaults.standard.set(token, forKey: "authToken")
-                            print(response.token)
                             AuthManager.shared.token = token
                             self.isLoggedIn = true
                         } else {

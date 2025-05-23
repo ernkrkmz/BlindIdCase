@@ -18,11 +18,10 @@ class ProfileViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        let url = "https://moviatask.cerasus.app/api/auth/me"
-        
-        NetworkManager.shared.getRequest(url: url, responseType: User.self) { result in
+        NetworkManager.shared.getCurrentUser { result in
             DispatchQueue.main.async {
                 self.isLoading = false
+
                 switch result {
                 case .success(let user):
                     self.user = user
@@ -37,5 +36,26 @@ class ProfileViewModel: ObservableObject {
         AuthManager.shared.logout()
         appState.isLoggedIn = false
     }
-
+    
+    func updateUser(_ user: UpdateUserRequestModel) {
+        
+        NetworkManager.shared.putRequest(
+            url: "/users/profile",
+            body: user,
+            responseType: UserResponse.self
+        ) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let updatedUser):
+                    print("Güncellendi: \(updatedUser)")
+                    self.user?.name = updatedUser.name
+                    self.user?.surname = updatedUser.surname
+                    self.user?.email = updatedUser.email
+                case .failure(let error):
+                    print("Hata: \(error)")
+                }
+            }
+        }
+    }
+    
 }

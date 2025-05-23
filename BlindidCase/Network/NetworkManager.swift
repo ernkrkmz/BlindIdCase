@@ -99,6 +99,57 @@ class NetworkManager {
                 }
             }.resume()
         }
+    
+    func putRequest<T: Encodable, R: Decodable>(
+            url: String,
+            body: T,
+            responseType: R.Type,
+            completion: @escaping (Result<R, Error>) -> Void
+        ) {
+            guard let requestUrl = URL(string: "\(baseUrl)\(url)") else {
+                completion(.failure(NetworkError.invalidUrl))
+                return
+            }
+
+            var request = URLRequest(url: requestUrl)
+            request.httpMethod = "PUT"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            // Token varsa ekle
+            if let token = AuthManager.shared.token {
+                request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            }
+
+            do {
+                let jsonData = try JSONEncoder().encode(body)
+                request.httpBody = jsonData
+            } catch {
+                completion(.failure(error))
+                return
+            }
+
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+
+                guard let data = data else {
+                    completion(.failure(NetworkError.noData))
+                    return
+                }
+
+                do {
+                    let decodedResponse = try JSONDecoder().decode(responseType, from: data)
+                    completion(.success(decodedResponse))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+
+            task.resume()
+        }
+    
          
 }
 
@@ -176,6 +227,16 @@ extension NetworkManager {
             completion: completion
         )
     }
+    func getCurrentUser(completion: @escaping (Result<User, Error>) -> Void) {
+        let url = "\(baseUrl)/auth/me"
+        
+        NetworkManager.shared.getRequest(
+            url: url,
+            responseType: User.self,
+            completion: completion
+        )
+    }
+
 }
 
 //MARK: - POST functions

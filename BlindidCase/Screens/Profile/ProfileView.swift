@@ -4,89 +4,97 @@
 //
 //  Created by Eren Korkmaz on 21.05.2025.
 //
-
-
 import SwiftUI
 
 struct ProfileView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @EnvironmentObject var appState: AppState
 
+    @State private var name = ""
+    @State private var surname = ""
+    @State private var email = ""
+    @State private var isEditing = false
+
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
+            VStack(alignment: .leading, spacing: 16) {
                 if viewModel.isLoading {
                     ProgressView("Yükleniyor...")
+                        .frame(maxWidth: .infinity, alignment: .center)
                 } else if let user = viewModel.user {
-                    VStack(spacing: 12) {
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(.blue)
-                        
-                        Text("\(user.name) \(user.surname)")
-                            .font(.title)
-                            .fontWeight(.semibold)
-
-                        Text(user.email)
-                            .foregroundColor(.gray)
-
-                        Divider()
-
-                        HStack {
-                            Text("Beğenilen Filmler:")
-                            Spacer()
-                            Text("\(user.likedMovies.count) adet")
-                                .bold()
+                    
+                    
+                        if isEditing {
+                            TextField("Ad", text: $name)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                            
+                            TextField("Soyad", text: $surname)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                            
+                            TextField("Email", text: $email)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        } else {
+                            Text("Ad: \(user.name)")
+                            Text("Soyad: \(user.surname)")
+                            Text("Email: \(user.email)")
                         }
+                        
+                    HStack {
+                        Button(isEditing ? "Kaydet" : "Değiştir") {
+                            if isEditing {
+                                let newUserModel = UpdateUserRequestModel(name: name, surname: surname, email: email)
+                                viewModel.updateUser(newUserModel)
+                                viewModel.fetchProfile()
+                            } else {
+                                name = user.name
+                                surname = user.surname
+                                email = user.email
+                            }
+                            isEditing.toggle()
+                        }
+                        .padding()
+                        .frame(width: 200)
+                        .background(isEditing ? Color.green : Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                    }
+                    .frame(maxWidth: .infinity)
 
                         Divider()
 
-                        Text("Üyelik Tarihi: \(formattedDate(user.createdAt))")
+                        Text("Beğenilen Filmler: \(user.likedMovies.count)")
+                        
+                        Text("Üyelik Tarihi: \(user.createdAt.formattedDate())")
                             .font(.footnote)
                             .foregroundColor(.secondary)
 
                         Spacer()
-
-                        Button(action: {
-                            viewModel.logOut(appState: appState)
-
-                        }) {
-                            Text("Çıkış Yap")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.red)
-                                .cornerRadius(10)
-                        }
-                    }
-                    .padding()
-                } else if let errorMessage = viewModel.errorMessage {
-                    Text("Hata: \(errorMessage)")
+                    Spacer()
+                    Spacer()
+                    HStack{
+                            Button(action: {
+                                viewModel.logOut(appState: appState)
+                            }) {
+                                Text("Çıkış Yap")
+                                    .padding()
+                                    .background(Color.red)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                            }
+                    }.frame(maxWidth : .infinity)
+                    
+                    Spacer(minLength: 20)
+                    
+                } else if let error = viewModel.errorMessage {
+                    Text("Hata: \(error)")
                         .foregroundColor(.red)
+                        .padding()
                 }
-
-                Spacer()
             }
             .navigationTitle("Profil")
             .onAppear {
                 viewModel.fetchProfile()
             }
-            
         }
     }
-
-    func formattedDate(_ isoDate: String) -> String {
-        let isoFormatter = ISO8601DateFormatter()
-        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        guard let date = isoFormatter.date(from: isoDate) else {
-            return isoDate
-        }
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "tr_TR")
-        formatter.dateFormat = "dd MMMM yyyy"
-        return formatter.string(from: date)
-    }
-
 }

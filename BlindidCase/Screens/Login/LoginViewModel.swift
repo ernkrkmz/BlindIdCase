@@ -15,26 +15,23 @@ class LoginViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isLoggedIn: Bool = false
 
-    func login() {
-            NetworkManager.shared.loginUser(
-                email: email,
-                password: password
-            ) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let response):
-                        if let token = response.token {
-                            
-                            AuthManager.shared.token = token
-                            self.isLoggedIn = true
-                        } else {
-                            self.errorMessage = response.message ?? "Giriş başarısız"
-                        }
-                    case .failure(let error):
-                        self.errorMessage = error.localizedDescription
+    func login(appState: AppState) {
+        NetworkManager.shared.loginUser(email: email, password: password) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    if let token = response.token {
+                        AuthManager.shared.token = token
+                        appState.isLoggedIn = true
+                    } else {
+                        self.errorMessage = response.message ?? "Giriş başarısız"
                     }
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
                 }
             }
         }
+    }
+
 
 }

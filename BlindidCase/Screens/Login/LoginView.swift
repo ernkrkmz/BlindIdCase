@@ -10,7 +10,8 @@ import SwiftUI
 
 struct LoginView: View {
     @StateObject private var viewModel = LoginViewModel()
-    
+    @EnvironmentObject var appState: AppState
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
@@ -32,7 +33,8 @@ struct LoginView: View {
                 
                 Button("Giriş Yap") {
                     print("burda")
-                    viewModel.login()
+                    viewModel.login(appState: appState)
+
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
@@ -46,12 +48,12 @@ struct LoginView: View {
                     Text("Hesabın yok mu?")
                 }
                 
-                NavigationLink(
-                    destination: MovieTabView(),
-                    isActive: $viewModel.isLoggedIn
-                ) {
-                    EmptyView()
-                }
+//                NavigationLink(
+//                    destination: MovieTabView(),
+//                    isActive: $viewModel.isLoggedIn
+//                ) {
+//                    EmptyView()
+//                }
             }
             .padding()
             

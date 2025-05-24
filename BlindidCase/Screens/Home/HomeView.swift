@@ -2,7 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
-    
+    @State var didLoad = false
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -10,9 +10,7 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-            
             VStack {
-                
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(viewModel.movies) { movie in
@@ -20,14 +18,17 @@ struct HomeView: View {
                                 MovieGridItemView(movie: movie)
                             }
                         }
-                        
                     }
                     .padding()
                 }
-                
             }
             .onAppear {
-                viewModel.fetchMovies()
+                if !didLoad {
+                    viewModel.fetchMovies()
+                }else {
+                    didLoad = true
+                }
+                
             }
             .background(
                 Image("Bg")

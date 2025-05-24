@@ -13,32 +13,22 @@ class LikeViewModel: ObservableObject {
     @Published var likedMovieIds: [Int] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
-
+    
     func fetchLikedMovies() {
-        NetworkManager.shared.getLikedMovieIds { result in
+        
+        NetworkManager.shared.getLikedMovies { result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let ids):
-                    self.likedMovieIds = ids
-                    self.likedMovies = []
-                    for id in ids {
-                        NetworkManager.shared.getMovieById(movieId: id) { result in
-                            DispatchQueue.main.async {
-                                switch result {
-                                case .success(let movie):
-                                    self.likedMovies.append(movie)
-                                case .failure(let error):
-                                    print("Error fetching movie for id \(id): \(error)")
-                                }
-                            }
-                        }
-                    }
-                    
+                case .success(let movies):
+                    self.likedMovies = movies
                 case .failure(let error):
-                    print("Error fetching liked movie IDs: \(error)")
+                    self.errorMessage = error.localizedDescription
+                    print(error.localizedDescription)
                 }
             }
+            
         }
+        
     }
-
+    
 }

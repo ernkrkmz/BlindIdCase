@@ -18,33 +18,34 @@ struct LikeView: View {
     
     var body: some View {
         
-        NavigationView {
-            VStack {
-                if viewModel.isLoading {
-                    ProgressView()
-                        .padding()
-                } else if let error = viewModel.errorMessage {
-                    Text("Hata: \(error)")
-                        .foregroundColor(.red)
-                } else {
-                    ScrollView {
-                        LazyVGrid(columns: columns, spacing: 16) {
-                            ForEach(viewModel.likedMovies) { movie in
-                                NavigationLink(destination: MovieDetailView(movie: movie)) {
-                                    MovieGridItemView(movie: movie)
+            NavigationView {
+                VStack {
+                    
+                        ScrollView {
+                            Text("Liked movies")
+                                .font(.system(size: 32, weight: .bold))
+                            LazyVGrid(columns: columns, spacing: 16) {
+                                ForEach(viewModel.likedMovies) { movie in
+                                    NavigationLink(destination: MovieDetailView(movie: movie)) {
+                                        MovieGridItemView(movie: movie)
+                                    }
                                 }
-                            }
 
+                            }
+                            .padding()
                         }
-                        .padding()
-                    }
+                    
                 }
-            }
-            .navigationTitle("Beğenilen filmler")
-            .onAppear {
-                viewModel.fetchLikedMovies()
-                
-            }
+                .onAppear {
+                    viewModel.fetchLikedMovies()
+                    
+                }
+        
+            .background(
+                Image("Bg")
+                    .resizable()
+                    .ignoresSafeArea()
+            )
             
         }
         

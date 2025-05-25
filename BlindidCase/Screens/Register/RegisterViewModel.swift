@@ -18,7 +18,9 @@ class RegisterViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var isRegistered: Bool = false
 
-    func register() {
+    
+    func register(appstate : AppState) {
+        
         NetworkManager.shared.registerUser(
             name: name,
             surname: surname,
@@ -29,8 +31,8 @@ class RegisterViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     if let token = response.token {
-                        UserDefaults.standard.set(token, forKey: "authToken")
-                        self.isRegistered = true
+                        AuthManager.shared.token = response.token
+                        appstate.isLoggedIn = true
                     } else {
                         self.errorMessage = response.message ?? "Kayıt başarısız"
                     }

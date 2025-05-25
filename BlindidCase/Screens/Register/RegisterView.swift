@@ -10,6 +10,7 @@ import SwiftUI
 
 struct RegisterView: View {
     @StateObject private var viewModel = RegisterViewModel()
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         NavigationStack {
@@ -38,7 +39,7 @@ struct RegisterView: View {
                 }
 
                 Button("Register") {
-                    viewModel.register()
+                    viewModel.register(appstate : appState)
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -49,10 +50,7 @@ struct RegisterView: View {
                 Spacer()
             }
             .padding()
-            .navigationDestination(isPresented: $viewModel.isRegistered) {
-                Text("Hoş geldin, \(viewModel.name)!")
-                    .font(.title)
-            }
+            
         }.background(
             Image("Bg")
                 .resizable()

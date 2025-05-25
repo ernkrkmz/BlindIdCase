@@ -10,10 +10,10 @@ import Foundation
 import Combine
 
 class RegisterViewModel: ObservableObject {
-    @Published var name: String = "Eren"
-    @Published var surname: String = "Korkmaz"
-    @Published var email: String = "eren@gmail.com"
-    @Published var password: String = "eren1234"
+    @Published var name: String = ""
+    @Published var surname: String = ""
+    @Published var email: String = ""
+    @Published var password: String = ""
 
     @Published var errorMessage: String?
     @Published var isRegistered: Bool = false

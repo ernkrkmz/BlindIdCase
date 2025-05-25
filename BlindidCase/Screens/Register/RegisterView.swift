@@ -37,13 +37,13 @@ struct RegisterView: View {
                         .foregroundColor(.red)
                 }
 
-                Button("Kayıt Ol") {
+                Button("Register") {
                     viewModel.register()
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.blue)
-                .foregroundColor(.white)
+                .background(Color.yellow)
+                .foregroundColor(.black)
                 .cornerRadius(8)
 
                 Spacer()
@@ -53,11 +53,11 @@ struct RegisterView: View {
                 Text("Hoş geldin, \(viewModel.name)!")
                     .font(.title)
             }
-        }
+        }.background(
+            Image("Bg")
+                .resizable()
+                .ignoresSafeArea()
+        )
     }
 }
-struct RegisterView_Previews: PreviewProvider {
-    static var previews: some View {
-        RegisterView()
-    }
-}
+

@@ -15,15 +15,15 @@ struct LoginView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                Text("Giriş Yap")
+                Text("Login")
                     .font(.largeTitle)
                     .bold()
                 
-                TextField("E-posta", text: $viewModel.email)
+                TextField("E-mail", text: $viewModel.email)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .keyboardType(.emailAddress)
                 
-                SecureField("Şifre", text: $viewModel.password)
+                SecureField("Password", text: $viewModel.password)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 if let error = viewModel.errorMessage {
@@ -31,34 +31,32 @@ struct LoginView: View {
                         .foregroundColor(.red)
                 }
                 
-                Button("Giriş Yap") {
-                    print("burda")
+                Button("Login") {
                     viewModel.login(appState: appState)
 
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.blue)
-                .foregroundColor(.white)
+                .background(Color.yellow)
+                .foregroundColor(.black)
                 .cornerRadius(8)
                 
                 Spacer()
                 
                 NavigationLink(destination: RegisterView()) {
-                    Text("Hesabın yok mu?")
+                    Text("Don't you have an account?")
+                        
                 }
                 
-//                NavigationLink(
-//                    destination: MovieTabView(),
-//                    isActive: $viewModel.isLoggedIn
-//                ) {
-//                    EmptyView()
-//                }
             }
             .padding()
-            
-            
-        }
+            .background(
+                Image("Bg")
+                    .resizable()
+                    .ignoresSafeArea()
+            )
+        }.tint(.yellow)
+        
     }
 }
 

@@ -19,25 +19,27 @@ struct ProfileView: View {
         NavigationView {
             VStack(alignment: .leading, spacing: 16) {
                 if let user = viewModel.user {
-                    
+                    Text("Profil")
+                        .font(.headline)
+                        .fontWeight(.bold)
                     if isEditing {
-                        TextField("Ad", text: $name)
+                        TextField("Name", text: $name)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         
-                        TextField("Soyad", text: $surname)
+                        TextField("Surname", text: $surname)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         
                         TextField("Email", text: $email)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             
                     } else {
-                        Text("Ad: \(user.name)")
-                        Text("Soyad: \(user.surname)")
+                        Text("Name: \(user.name)")
+                        Text("Surname: \(user.surname)")
                         Text("Email: \(user.email)")
                     }
                     
                     HStack {
-                        Button(isEditing ? "Kaydet" : "Değiştir") {
+                        Button(isEditing ? "Save" : "Change") {
                             if isEditing {
                                 let newUserModel = UpdateUserRequestModel(name: name, surname: surname, email: email)
                                 viewModel.updateUser(newUserModel)
@@ -51,27 +53,23 @@ struct ProfileView: View {
                         }
                         .padding()
                         .frame(width: 200)
-                        .background(isEditing ? Color.green : Color.blue)
-                        .foregroundColor(.white)
+                        .background(isEditing ? Color.green : Color.yellow)
+                        .foregroundColor(.black)
                         .cornerRadius(8)
                     }
                     .frame(maxWidth: .infinity)
                     
                     Divider()
                     
-                    Text("Beğenilen Filmler: \(user.likedMovies.count)")
+                    Text("Liked movie count: \(user.likedMovies.count)")
                     
-                    Text("Üyelik Tarihi: \(user.createdAt.formattedDate())")
-                        
-                        
-                    
+                    Text("Created at: \(user.createdAt.formattedDate())")
                     Spacer()
-                    
                     HStack{
                         Button(action: {
                             viewModel.logOut(appState: appState)
                         }) {
-                            Text("Çıkış Yap")
+                            Text("Logout")
                                 .padding()
                                 .background(Color.red)
                                 .foregroundColor(.white)

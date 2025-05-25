@@ -10,8 +10,8 @@ import Foundation
 import Combine
 
 class LoginViewModel: ObservableObject {
-    @Published var email: String = "eren@gmail.com"
-    @Published var password: String = "eren1234"
+    @Published var email: String = "" //test : eren@gmail.com
+    @Published var password: String = "" // test : eren1234
     @Published var errorMessage: String?
     @Published var isLoggedIn: Bool = false
 

@@ -47,7 +47,7 @@ struct LikeView: View {
                     .ignoresSafeArea()
             )
             
-        }
+            }.tint(.yellow)
         
     }
     

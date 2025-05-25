@@ -18,27 +18,24 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 16) {
-                if viewModel.isLoading {
-                    ProgressView("Yükleniyor...")
-                        .frame(maxWidth: .infinity, alignment: .center)
-                } else if let user = viewModel.user {
+                if let user = viewModel.user {
                     
-                    
-                        if isEditing {
-                            TextField("Ad", text: $name)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                            
-                            TextField("Soyad", text: $surname)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                            
-                            TextField("Email", text: $email)
-                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                        } else {
-                            Text("Ad: \(user.name)")
-                            Text("Soyad: \(user.surname)")
-                            Text("Email: \(user.email)")
-                        }
+                    if isEditing {
+                        TextField("Ad", text: $name)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
                         
+                        TextField("Soyad", text: $surname)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        
+                        TextField("Email", text: $email)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            
+                    } else {
+                        Text("Ad: \(user.name)")
+                        Text("Soyad: \(user.surname)")
+                        Text("Email: \(user.email)")
+                    }
+                    
                     HStack {
                         Button(isEditing ? "Kaydet" : "Değiştir") {
                             if isEditing {
@@ -59,42 +56,43 @@ struct ProfileView: View {
                         .cornerRadius(8)
                     }
                     .frame(maxWidth: .infinity)
-
-                        Divider()
-
-                        Text("Beğenilen Filmler: \(user.likedMovies.count)")
+                    
+                    Divider()
+                    
+                    Text("Beğenilen Filmler: \(user.likedMovies.count)")
+                    
+                    Text("Üyelik Tarihi: \(user.createdAt.formattedDate())")
                         
-                        Text("Üyelik Tarihi: \(user.createdAt.formattedDate())")
-                            .font(.footnote)
-                            .foregroundColor(.secondary)
-
-                        Spacer()
+                        
+                    
                     Spacer()
-                    Spacer()
+                    
                     HStack{
-                            Button(action: {
-                                viewModel.logOut(appState: appState)
-                            }) {
-                                Text("Çıkış Yap")
-                                    .padding()
-                                    .background(Color.red)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(8)
-                            }
+                        Button(action: {
+                            viewModel.logOut(appState: appState)
+                        }) {
+                            Text("Çıkış Yap")
+                                .padding()
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                        }
                     }.frame(maxWidth : .infinity)
                     
                     Spacer(minLength: 20)
                     
-                } else if let error = viewModel.errorMessage {
-                    Text("Hata: \(error)")
-                        .foregroundColor(.red)
-                        .padding()
                 }
+                
             }
-            .navigationTitle("Profil")
             .onAppear {
                 viewModel.fetchProfile()
             }
+            .padding()
+            .background(
+                Image("Bg")
+                    .resizable()
+                    .ignoresSafeArea()
+            )
         }
     }
 }

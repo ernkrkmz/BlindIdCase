@@ -32,7 +32,7 @@ struct HomeView: View {
                 }
                 .searchable(
                     text: $searchText,
-                    prompt: "Film ara"
+                    prompt: "Search..."
                 )
             }
             .onAppear {
